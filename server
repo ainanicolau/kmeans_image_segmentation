@@ -1,0 +1,34 @@
+#!/usr/bin/env python3
+
+from http.server import HTTPServer, SimpleHTTPRequestHandler
+
+PORT = 8080
+
+html = """ 
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Example</title>
+    </head>
+    <body>
+        <p>heeeeeey mierda!.</p>
+        <img src="im.jpg">
+    </body>
+</html>
+"""
+
+class MyHTTPRequestHandler(SimpleHTTPRequestHandler):
+    def do_POST(s):
+        print("heeeeyy")
+        s.send_response(200)
+        s.send_header("Content-type", "text/html")
+        s.end_headers()
+        s.wfile.write(html.encode())
+
+def main():
+    httpd = HTTPServer(('', PORT), MyHTTPRequestHandler)
+    print('Serving at port ' + str(PORT))
+    httpd.serve_forever();
+
+if __name__ == '__main__':
+    main()
