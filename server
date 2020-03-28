@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from http.server import HTTPServer, SimpleHTTPRequestHandler
+import appKmeans as km
 
 PORT = 8080
 
@@ -12,7 +13,7 @@ html = """
     </head>
     <body>
         <p>heeeeeey mierda!.</p>
-        <img src="im.jpg">
+        <img src="im_kmeans.jpg">
     </body>
 </html>
 """
@@ -23,6 +24,7 @@ class MyHTTPRequestHandler(SimpleHTTPRequestHandler):
         s.send_response(200)
         s.send_header("Content-type", "text/html")
         s.end_headers()
+        km.run("im.jpg", 3)
         s.wfile.write(html.encode())
 
 def main():
