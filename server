@@ -2,30 +2,31 @@
 
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 import appKmeans as km
+import cgi
 
 PORT = 8080
 
-html = """ 
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Example</title>
-    </head>
-    <body>
-        <p>heeeeeey mierda!.</p>
-        <img src="im_kmeans.jpg">
-    </body>
-</html>
-"""
 
 class MyHTTPRequestHandler(SimpleHTTPRequestHandler):
-    def do_POST(s):
+    def do_POST(self):
         print("heeeeyy")
-        s.send_response(200)
-        s.send_header("Content-type", "text/html")
-        s.end_headers()
-        km.run("im.jpg", 3)
-        s.wfile.write(html.encode())
+        form = cgi.FieldStorage(
+            fp=self.rfile,
+            headers=self.headers,
+            environ={'REQUEST_METHOD':'POST',
+            'CONTENT_TYPE':self.headers['Content-Type'],
+            })
+        image = form.getvalue("image")
+        print(image)
+        self.send_response(200)
+        self.send_header("Content-type", "text/html")
+        self.end_headers()
+        km.run(image, 3)
+
+        with open('response.html', 'rb') as file:
+            data = file.read()
+
+        self.wfile.write(data)
 
 def main():
     httpd = HTTPServer(('', PORT), MyHTTPRequestHandler)
