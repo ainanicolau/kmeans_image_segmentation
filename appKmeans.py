@@ -23,15 +23,12 @@ def parseArguments():
 
 
 def generateCentroids(k, im):
-        # maxValues = np.max(im, axis=0)
-        # index = np.random.randint(len(im), size=k)
-        # centroids = im[index]
+        centroidIndex = np.random.randint(k, size=len(im))
 
-        maxValues = np.max(im, axis=0)
-        centroidsX = np.random.random(k)*maxValues[0]
-        centroidsY = np.random.random(k)*maxValues[1]
-        centroidsZ = np.random.random(k)*maxValues[2]
-        centroids = np.array([centroidsX,centroidsY,centroidsZ]).transpose()
+        centroidList = []
+        for centroid in range(k):
+            centroidList.append(np.mean(im[np.where(centroidIndex==centroid)],axis=0))
+        centroids = np.array(centroidList)
 
         return centroids
 
@@ -67,11 +64,11 @@ def createSegmentedImage(centroids, centroidIndex, imShape):
         segmentedImage = np.array(
             segmentedArray.reshape(imShape[0],imShape[1],3))
         im = PIL.Image.fromarray(np.uint8(segmentedImage))
-        im.save("im_kmeans.jpg")
+        return(im)
 
 
 def run(im, k):
-        imOriginal = np.array(PIL.Image.open(im))
+        imOriginal = np.array(im)
         im = imOriginal.reshape(imOriginal.shape[0]*imOriginal.shape[1],3)
 
         # Initialization step
@@ -79,7 +76,7 @@ def run(im, k):
 
         i=0
         stop = False
-        while (i<5):#(not stop):
+        while (not stop):
                 # Assignment step
                 centroidIndex = createClusters(centroids, im)
 
@@ -87,7 +84,8 @@ def run(im, k):
                 centroids, stop = updateCentroid(centroids, im, centroidIndex)
                 i=i+1
 
-        createSegmentedImage(centroids, centroidIndex, imOriginal.shape)
+        im = createSegmentedImage(centroids, centroidIndex, imOriginal.shape)
+        return(im)
 
 
 def main():       

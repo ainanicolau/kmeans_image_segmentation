@@ -23,15 +23,12 @@ def parseArguments():
 
 
 def generateCentroids(k, im):
-        # maxValues = np.max(im, axis=0)
-        # index = np.random.randint(len(im), size=k)
-        # centroids = im[index]
+        centroidIndex = np.random.randint(k, size=len(im))
 
-        maxValues = np.max(im, axis=0)
-        centroidsX = np.random.random(k)*maxValues[0]
-        centroidsY = np.random.random(k)*maxValues[1]
-        centroidsZ = np.random.random(k)*maxValues[2]
-        centroids = np.array([centroidsX,centroidsY,centroidsZ]).transpose()
+        centroidList = []
+        for centroid in range(k):
+            centroidList.append(np.mean(im[np.where(centroidIndex==centroid)],axis=0))
+        centroids = np.array(centroidList)
 
         return centroids
 
