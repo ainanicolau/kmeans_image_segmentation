@@ -5,7 +5,7 @@ import appKmeans as km
 import cgi
 import base64
 from io import BytesIO
-from PIL import Image 
+from PIL import Image
 import numpy as np
 
 PORT = 8080
@@ -13,13 +13,11 @@ PORT = 8080
 
 class MyHTTPRequestHandler(SimpleHTTPRequestHandler):
     def do_POST(self):
-        print("heeeeyy server")
-        form = cgi.FieldStorage(
-            fp=self.rfile,
-            headers=self.headers,
-            environ={'REQUEST_METHOD':'POST',
-            'CONTENT_TYPE':self.headers['Content-Type'],
-            })
+        print("Receiving post")
+        environ = {'REQUEST_METHOD': 'POST',
+                   'CONTENT_TYPE': self.headers['Content-Type'], }
+        form = cgi.FieldStorage(fp=self.rfile, headers=self.headers,
+                                environ=environ)
 
         image_bytes = form.getvalue("image")
         image = Image.open(BytesIO(image_bytes))
@@ -29,10 +27,10 @@ class MyHTTPRequestHandler(SimpleHTTPRequestHandler):
 
         segmented_im = km.run(image, 10)
         buffer_ = BytesIO()
-        segmented_im.save(buffer_,format="JPEG")                  
-        myimage = buffer_.getvalue()                    
+        segmented_im.save(buffer_, format="JPEG")
+        myimage = buffer_.getvalue()
         im64 = base64.b64encode(myimage)
-        
+
         with open('response.html', 'r') as file:
             data = file.read()
 
@@ -44,7 +42,7 @@ class MyHTTPRequestHandler(SimpleHTTPRequestHandler):
 def main():
     httpd = HTTPServer(('', PORT), MyHTTPRequestHandler)
     print('Serving at port ' + str(PORT))
-    httpd.serve_forever();
+    httpd.serve_forever()
 
 
 if __name__ == '__main__':
