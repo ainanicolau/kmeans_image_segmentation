@@ -2,10 +2,10 @@
 # K-Means Image Segmentation
 
 This project provides an implementation of the k-means algorithm for image segmentation, inspired by the desire to reproduce similar images to some artists like Joan Aguiló, who uses color segmentation and reduction techniques to create bold murals.
-![alt text](img/inspiration)
+![alt text](img/inspiration.png)
 
 The k-means algorithm is a clustering method that partitions a set of data points into k clusters based on their distance to the centroids. In the context of image segmentation, this means that the algorithm assigns each pixel to the cluster whose centroid is closest to it in color space. With this tool the user can choose the number of clusters allowing for flexibility and customization.
-![alt text](img/example)
+![alt text](img/example.png)
 
 
 ## Installation
@@ -21,7 +21,7 @@ Next, navigate to the project directory and install the required dependencies us
 
 ```bash
 cd kmeans_image_segmentation
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 
 ## Usage
@@ -41,4 +41,4 @@ python3 run_server.py
 ```
 and navigate to http://localhost:8080 in your web browser.
 
-![alt text](img/web_interface)
+![alt text](img/web_interface.png)
